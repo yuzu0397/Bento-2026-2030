@@ -170,7 +170,7 @@ div[role="dialog"] * {
     perspective: 1000px;
 }
 
-/* ⚡ Sonyロゴ 3Dホログラム演出（7.8秒：減光フェードアウト版） ⚡ */
+/* ⚡ Sonyロゴ 3Dホログラム演出（2.8秒：減光フェードアウト版） ⚡ */
 .sony-logo {
     width: 550px !important;
     max-width: 75vw !important;
