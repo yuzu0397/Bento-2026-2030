@@ -170,61 +170,46 @@ div[role="dialog"] * {
     perspective: 1000px;
 }
 
-/* ⚡ Sonyロゴ 3Dホログラム演出（2.8秒：減光フェードアウト版） ⚡ */
+/* ⚡ Sonyロゴ 3Dホログラム演出（2.6秒高速版：減光フェードアウト） ⚡ */
 .sony-logo {
     width: 550px !important;
     max-width: 75vw !important;
     height: auto !important;
     object-fit: contain;
     transform-style: preserve-3d;
-    animation: sonyDarkFadeOutEffect 2.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    animation: sonyDarkFadeOutEffect 2.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
 }
 
 @keyframes sonyDarkFadeOutEffect {
-    /* 0%〜25%: 遥か奥からスピンして出現 */
+    /* 0%〜25%: 迅速に出現 */
     0% {
         opacity: 0;
         filter: brightness(2.5) drop-shadow(0 0 50px rgba(0, 210, 255, 1));
         transform: perspective(1000px) rotateY(-180deg) rotateX(45deg) scale(0.1) translateZ(-800px);
     }
-    12% {
-        opacity: 0.8;
-        filter: brightness(2) drop-shadow(0 0 40px rgba(0, 210, 255, 0.9));
-    }
-    18% {
-        opacity: 0.2; /* フリッカー */
-    }
     25% {
         opacity: 1;
         filter: brightness(1.8) drop-shadow(0 0 30px rgba(0, 210, 255, 0.8));
-        transform: perspective(1000px) rotateY(15deg) rotateX(-10deg) scale(1.15) translateZ(80px);
+        transform: perspective(1000px) rotateY(10deg) rotateX(-5deg) scale(1.1) translateZ(50px);
     }
 
-    /* 25%〜70%: アニメーション・揺らぎ */
-    40% {
-        transform: perspective(1000px) rotateY(-12deg) rotateX(8deg) scale(1.05) translateZ(40px);
-        filter: brightness(1.4) drop-shadow(0 15px 45px rgba(0, 210, 255, 0.7));
-    }
-    55% {
-        transform: perspective(1000px) rotateY(6deg) rotateX(-4deg) scale(1.02) translateZ(20px);
-        filter: brightness(1.2) drop-shadow(0 10px 30px rgba(255, 255, 255, 0.6));
-    }
-    70% {
+    /* 25%〜65%: 正面で静止・揺らぎ */
+    65% {
         opacity: 1;
         transform: perspective(1000px) rotateY(0deg) rotateX(0deg) scale(1) translateZ(0px);
         filter: brightness(1) drop-shadow(0 0 20px rgba(0, 210, 255, 0.5));
     }
 
-    /* 70%〜100%: 💡 明るさを徐々に減らし（暗くし）ていってフェードアウト 💡 */
-    85% {
-        opacity: 0.6;
-        filter: brightness(0.5) drop-shadow(0 0 10px rgba(0, 210, 255, 0.2));
-        transform: perspective(1000px) rotateX(15deg) scale(0.95) translateZ(-50px);
+    /* 65%〜100%: 💡 明るさを急激に落としながら暗転消去 💡 */
+    82% {
+        opacity: 0.5;
+        filter: brightness(0.4) drop-shadow(0 0 8px rgba(0, 210, 255, 0.2));
+        transform: perspective(1000px) rotateX(10deg) scale(0.96) translateZ(-30px);
     }
     100% {
         opacity: 0;
         filter: brightness(0) drop-shadow(0 0 0px rgba(0, 0, 0, 0));
-        transform: perspective(1000px) rotateX(30deg) scale(0.85) translateZ(-200px);
+        transform: perspective(1000px) rotateX(20deg) scale(0.9) translateZ(-150px);
     }
 }
 
@@ -295,7 +280,7 @@ if "page" not in str_lit.session_state:
 if "selected_bentos" not in str_lit.session_state:
     str_lit.session_state.selected_bentos = []
 
-# --- 起動画面（Sonyロゴ 3D演出：7.8秒） ---
+# --- 起動画面（Sonyロゴ 3D演出：2.6秒） ---
 if not str_lit.session_state.booted:
     boot_placeholder = str_lit.empty()
     boot_html = f'''
@@ -304,7 +289,7 @@ if not str_lit.session_state.booted:
     </div>
     '''
     boot_placeholder.markdown(boot_html, unsafe_allow_html=True)
-    time.sleep(7.8)
+    time.sleep(2.6)
     str_lit.session_state.booted = True
     boot_placeholder.empty()
     str_lit.rerun()
