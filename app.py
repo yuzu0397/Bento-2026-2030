@@ -177,7 +177,7 @@ div[role="dialog"] * {
     height: auto !important;
     object-fit: contain;
     transform-style: preserve-3d;
-    animation: sonyDarkFadeOutEffect 7.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    animation: sonyDarkFadeOutEffect 2.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
 }
 
 @keyframes sonyDarkFadeOutEffect {
