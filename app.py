@@ -278,9 +278,7 @@ if not str_lit.session_state.authenticated:
                 str_lit.session_state.authenticated = True
                 str_lit.rerun()
             else:
-                str_lit.error("Incorrect password.
-Please contact the administrator.
-yuzukyoto0811@gmail.com")
+                str_lit.error("間違えています")
     str_lit.stop()
 
 # --- スペック・環境情報の取得と必須比較 ---
