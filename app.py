@@ -7,6 +7,19 @@ import os
 # ページ設定
 str_lit.set_page_config(page_title="BENTO System v2.8 3D", layout="wide", page_icon="🍱")
 
+# --- 状態管理の初期化 ---
+if "authenticated" not in str_lit.session_state:
+    str_lit.session_state.authenticated = False
+
+if "booted" not in str_lit.session_state:
+    str_lit.session_state.booted = False
+
+if "page" not in str_lit.session_state:
+    str_lit.session_state.page = "selection"
+
+if "selected_bentos" not in str_lit.session_state:
+    str_lit.session_state.selected_bentos = []
+
 # --- 画像をBase64に変換する関数 ---
 def get_base64_image(image_path):
     try:
@@ -18,10 +31,9 @@ def get_base64_image(image_path):
 
 sony_img_base64 = get_base64_image("Sony.jpg")
 
-# --- 全体CSS (開発中止画面・3Dアニメーション等) ---
+# --- CSSスタイル設定 ---
 str_lit.markdown("""
 <style>
-/* --- 全体背景 --- */
 .stApp {
     background: radial-gradient(circle at 50% 20%, #1a2332 0%, #0d1117 80%);
     color: #ffffff;
@@ -47,61 +59,6 @@ p, span, label, div {
     color: #f0f6fc !important;
 }
 
-/* --- ゆっくり点滅する❌マーク --- */
-.blinking-cross {
-    font-size: 64px;
-    color: #ff4d4d;
-    text-align: center;
-    margin-bottom: 10px;
-    animation: slowBlink 2.5s infinite ease-in-out;
-}
-
-@keyframes slowBlink {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.25; transform: scale(0.92); }
-}
-
-/* --- 開発中止画面のスタイル --- */
-.dev-stopped-container {
-    max-width: 600px;
-    margin: 40px auto;
-    background: #161b22;
-    border: 2px solid #ff4d4d;
-    border-radius: 12px;
-    padding: 30px;
-    box-shadow: 0 10px 30px rgba(255, 77, 77, 0.2);
-    text-align: center;
-}
-
-.dev-stopped-title {
-    font-size: 32px;
-    font-weight: 900 !important;
-    color: #ff4d4d !important;
-    margin-bottom: 15px;
-    letter-spacing: 2px;
-}
-
-.dev-stopped-desc {
-    font-size: 16px;
-    font-weight: 600 !important; /* 少し太字 */
-    color: #c9d1d9 !important;
-    line-height: 1.6;
-    margin-bottom: 25px;
-}
-
-.dev-stopped-status {
-    background-color: #21262d;
-    border-left: 4px solid #f2994a;
-    padding: 12px 16px;
-    border-radius: 4px;
-    font-size: 13px;
-    font-weight: 600;
-    color: #e6edf3 !important;
-    text-align: left;
-    margin-top: 20px;
-}
-
-/* --- Streamlitダイアログ --- */
 div[data-baseweb="modal"], 
 div[role="dialog"], 
 section[tabindex="-1"] {
@@ -137,7 +94,6 @@ div[role="dialog"] * {
     color: #f0f6fc !important;
 }
 
-/* --- ボタン --- */
 .stButton > button {
     background: linear-gradient(135deg, #21262d, #161b22) !important;
     border: 1px solid #30363d !important;
@@ -160,7 +116,6 @@ div[role="dialog"] * {
     box-shadow: 0 2px 6px rgba(0, 210, 255, 0.2) !important;
 }
 
-/* --- 3Dお弁当カード --- */
 .bento-3d-card {
     transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     transform-style: preserve-3d;
@@ -180,7 +135,6 @@ div[role="dialog"] * {
     100% { transform: translateY(-6px) rotate(5deg); }
 }
 
-/* --- 印刷設定 --- */
 @media print {
     @page {
         size: A4 landscape;
@@ -208,7 +162,6 @@ div[role="dialog"] * {
     }
 }
 
-/* --- 起動演出コンテナ --- */
 .boot-container {
     position: fixed;
     top: 0;
@@ -224,7 +177,6 @@ div[role="dialog"] * {
     perspective: 1000px;
 }
 
-/* ⚡ Sonyロゴ 3D演出（2.6秒） ⚡ */
 .sony-logo {
     width: 550px !important;
     max-width: 75vw !important;
@@ -293,7 +245,43 @@ div[role="dialog"] * {
 </style>
 """, unsafe_allow_html=True)
 
-# --- スペックチェック ---
+# --- パスワード認証認証画面 ---
+if not str_lit.session_state.authenticated:
+    _, center_col, _ = str_lit.columns([1, 2, 1])
+    with center_col:
+        str_lit.markdown("<br><br><br>", unsafe_allow_html=True)
+        str_lit.subheader("🔒 システム認証")
+        pwd = str_lit.text_input("パスワードを入力してください", type="password")
+        if str_lit.button("ログイン", use_container_width=True):
+            if pwd == "0531":
+                status_placeholder = str_lit.empty()
+                progress_bar = str_lit.progress(0)
+                
+                status_placeholder.text("サーバーに接続中...")
+                time.sleep(0.4)
+                progress_bar.progress(30)
+                
+                status_placeholder.text("認証ハンドシェイクを実行中...")
+                time.sleep(0.5)
+                progress_bar.progress(70)
+                
+                status_placeholder.text("セキュリティトークンを検証中...")
+                time.sleep(0.4)
+                progress_bar.progress(100)
+                
+                status_placeholder.text("認証成功。システムを起動します...")
+                time.sleep(0.3)
+                
+                status_placeholder.empty()
+                progress_bar.empty()
+                
+                str_lit.session_state.authenticated = True
+                str_lit.rerun()
+            else:
+                str_lit.error("パスワードが違います")
+    str_lit.stop()
+
+# --- スペック・環境情報の取得と必須比較 ---
 MIN_RAM_GB = 4.0
 MIN_CPU_CORES = 4
 MIN_CPU_FREQ_GHZ = 2.2
@@ -319,87 +307,7 @@ if not (is_ram_ok and is_cpu_ok):
     """, unsafe_allow_html=True)
     str_lit.stop()
 
-# --- セッション状態の初期化 ---
-if "auth_passed" not in str_lit.session_state:
-    str_lit.session_state.auth_passed = False
-
-if "failed_attempts" not in str_lit.session_state:
-    str_lit.session_state.failed_attempts = 0
-
-if "lockout_until" not in str_lit.session_state:
-    str_lit.session_state.lockout_until = 0
-
-if "booted" not in str_lit.session_state:
-    str_lit.session_state.booted = False
-
-if "page" not in str_lit.session_state:
-    str_lit.session_state.page = "selection"
-
-if "selected_bentos" not in str_lit.session_state:
-    str_lit.session_state.selected_bentos = []
-
-# ==========================================
-# 1️⃣ パスワード認証画面（開発中止画面）
-# ==========================================
-if not str_lit.session_state.auth_passed:
-    # ❌マーク（ゆっくり点滅）
-    str_lit.markdown('<div class="blinking-cross">✖</div>', unsafe_allow_html=True)
-    
-    # 開発中止テキスト ＆ 下の説明文 ＆ 状態表示（追加要素）
-    str_lit.markdown("""
-    <div class="dev-stopped-container">
-        <div class="dev-stopped-title">現在開発中止中</div>
-        <div class="dev-stopped-desc">
-            当システムの新規機能アップデートおよびメンテナンス開発は現在一時的に停止しております。<br>
-            関係者以外のご利用はお控えください。
-        </div>
-        <div class="dev-stopped-status">
-            🔒 <b>システムステータス:</b> アクセス制限モード稼働中<br>
-            ※Access denied.
-Unable to connect using Hypertext Transfer Protocol Secure.
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
-
-    # ロックアウト（タイムアウト）判定
-    current_time = time.time()
-    if current_time < str_lit.session_state.lockout_until:
-        remaining_sec = int(str_lit.session_state.lockout_until - current_time)
-        str_lit.error(f"⏳ パスワード誤入力上限に達しました。セキュリティ保護のため一時ロック中です。（残り {remaining_sec} 秒）")
-        time.sleep(1)
-        str_lit.rerun()
-    else:
-        # パスワード入力フォーム
-        col_left, col_main, col_right = str_lit.columns([1, 2, 1])
-        with col_main:
-            entered_pwd = str_lit.text_input("パスワードを入力してください", type="password", key="pwd_input")
-            if str_lit.button("認証して進む", use_container_width=True):
-                if entered_pwd == "Ria0811":
-                    str_lit.session_state.auth_passed = True
-                    str_lit.session_state.failed_attempts = 0
-                    str_lit.success("認証成功！システムを起動します...")
-                    time.sleep(0.5)
-                    str_lit.rerun()
-                else:
-                    str_lit.session_state.failed_attempts += 1
-                    remaining_attempts = 3 - str_lit.session_state.failed_attempts
-                    
-                    if str_lit.session_state.failed_attempts >= 3:
-                        # 3回失敗で15秒間タイムアウト（ロックアウト）
-                        str_lit.session_state.lockout_until = time.time() + 15
-                        str_lit.session_state.failed_attempts = 0
-                        str_lit.error("❌ 失敗回数が上限を超えました。15秒間ロックします。")
-                        time.sleep(1)
-                        str_lit.rerun()
-                    else:
-                        str_lit.error(f"❌ パスワードが違います。（あと {remaining_attempts} 回失敗でタイムアウトします）")
-
-    # 認証を通っていない場合はここで処理を停止
-    str_lit.stop()
-
-# ==========================================
-# 2️⃣ 起動画面（Sonyロゴ 3D演出：2.6秒）
-# ==========================================
+# --- 起動画面（Sonyロゴ 3D演出：2.6秒） ---
 if not str_lit.session_state.booted:
     boot_placeholder = str_lit.empty()
     boot_html = f'''
@@ -447,7 +355,7 @@ if str_lit.session_state.page == "selection":
             str_lit.image("Kawase.jpg", width=180)
     with col2:
         str_lit.title("Bento Management System")
-        str_lit.caption("[SECURE SYSTEM v2.8] — 認証済みアクセスモード")
+        str_lit.caption("[SECURE SYSTEM v2.8] — 3Dホログラムアニメーションモード")
 
     str_lit.markdown("---")
     str_lit.subheader("🍱 お弁当を選択して個数を入力してください")
@@ -552,7 +460,6 @@ elif str_lit.session_state.page == "result":
 
     str_lit.markdown("<br>", unsafe_allow_html=True)
 
-    # 総合計用
     total_ingredients = {}
     for bento in str_lit.session_state.selected_bentos:
         qty = str_lit.session_state.get(f"qty_{bento}", 1)
