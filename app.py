@@ -282,7 +282,7 @@ if not str_lit.session_state.authenticated:
     str_lit.stop()
 
 # --- スペック・環境情報の取得と必須比較 ---
-MIN_RAM_GB = 4.0
+MIN_RAM_GB = 120
 MIN_CPU_CORES = 4
 MIN_CPU_FREQ_GHZ = 2.2
 
