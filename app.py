@@ -245,14 +245,13 @@ div[role="dialog"] * {
 </style>
 """, unsafe_allow_html=True)
 
-# --- パスワード認証認証画面 ---
+# --- パスワード認証画面 ---
 if not str_lit.session_state.authenticated:
     _, center_col, _ = str_lit.columns([1, 2, 1])
     with center_col:
         str_lit.markdown("<br><br><br>", unsafe_allow_html=True)
         str_lit.subheader("🔒 システム認証")
-        pwd = str_lit.text_input("パスワードを入力してください
-        不明な場合yuzukyoto0811「gmail」までお問い合わせください", type="password")
+        pwd = str_lit.text_input("パスワードを入力してください", type="password")
         if str_lit.button("ログイン", use_container_width=True):
             if pwd == "0531":
                 status_placeholder = str_lit.empty()
@@ -279,11 +278,13 @@ if not str_lit.session_state.authenticated:
                 str_lit.session_state.authenticated = True
                 str_lit.rerun()
             else:
-                str_lit.error("間違えています")
+                # 文字列連結で .com の自動コマンド化・リンク判定を回避
+                contact_email = "yuzukyoto0811@gmail." + "com"
+                str_lit.error(f"You do not have access permission.\nFor inquiries, please contact: {contact_email}")
     str_lit.stop()
 
 # --- スペック・環境情報の取得と必須比較 ---
-MIN_RAM_GB = 120
+MIN_RAM_GB = 4.0
 MIN_CPU_CORES = 4
 MIN_CPU_FREQ_GHZ = 2.2
 
@@ -355,8 +356,8 @@ if str_lit.session_state.page == "selection":
         if os.path.exists("Kawase.jpg"):
             str_lit.image("Kawase.jpg", width=180)
     with col2:
-        str_lit.title("Bento Management✅ ")
-        str_lit.caption("現在このシステムは正常に動作しています✅")
+        str_lit.title("Bento Management System")
+        str_lit.caption("[SECURE SYSTEM v2.8] — 3Dホログラムアニメーションモード")
 
     str_lit.markdown("---")
     str_lit.subheader("🍱 お弁当を選択して個数を入力してください")
