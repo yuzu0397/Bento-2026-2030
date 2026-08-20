@@ -252,7 +252,7 @@ if not str_lit.session_state.authenticated:
         str_lit.markdown("<br><br><br>", unsafe_allow_html=True)
         str_lit.subheader("🔒 システム認証")
         pwd = str_lit.text_input("パスワードを入力してください
-        不明な場合yuzukyoto0811@gmailまでお問い合わせください", type="password")
+        不明な場合yuzukyoto0811「gmail」までお問い合わせください", type="password")
         if str_lit.button("ログイン", use_container_width=True):
             if pwd == "0531":
                 status_placeholder = str_lit.empty()
