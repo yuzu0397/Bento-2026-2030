@@ -354,7 +354,7 @@ if str_lit.session_state.page == "selection":
         if os.path.exists("Kawase.jpg"):
             str_lit.image("Kawase.jpg", width=180)
     with col2:
-        str_lit.title("Bento Management ")
+        str_lit.title("Bento Management✅ ")
         str_lit.caption("現在このシステムは正常に動作しています✅")
 
     str_lit.markdown("---")
