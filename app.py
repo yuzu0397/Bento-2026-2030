@@ -355,7 +355,7 @@ if str_lit.session_state.page == "selection":
             str_lit.image("Kawase.jpg", width=180)
     with col2:
         str_lit.title("Bento Management ")
-        str_lit.caption("[SECURE SYSTEM v2.8] — 3Dホログラムアニメーションモード")
+        str_lit.caption("現在このシステムは正常に動作しています✅")
 
     str_lit.markdown("---")
     str_lit.subheader("🍱 お弁当を選択して個数を入力してください")
