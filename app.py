@@ -263,7 +263,7 @@ if not str_lit.session_state.authenticated:
                 
                 status_placeholder.text("Starting authentication with the server...")
                 time.sleep(3.2)
-                progress_bar.progress(4.7)
+                progress_bar.progress(47)
 
                 status_placeholder.text("Authenticating...")
                 time.sleep(4.3)
