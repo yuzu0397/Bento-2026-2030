@@ -251,26 +251,30 @@ if not str_lit.session_state.authenticated:
     with center_col:
         str_lit.markdown("<br><br><br>", unsafe_allow_html=True)
         str_lit.subheader("🔒 システム認証")
-        pwd = str_lit.text_input("パスワードを入力してください", type="password")
-        if str_lit.button("ログイン", use_container_width=True):
+        pwd = str_lit.text_input("Please enter your password (4-digit PIN code).", type="password")
+        if str_lit.button("Log in", use_container_width=True):
             if pwd == "0531":
                 status_placeholder = str_lit.empty()
                 progress_bar = str_lit.progress(0)
                 
-                status_placeholder.text("サーバーに接続中...")
-                time.sleep(0.4)
-                progress_bar.progress(30)
+                status_placeholder.text("Connection to the server has started.")
+                time.sleep(5.6)
+                progress_bar.progress(20)
                 
-                status_placeholder.text("認証ハンドシェイクを実行中...")
-                time.sleep(0.5)
-                progress_bar.progress(70)
+                status_placeholder.text("Starting authentication with the server...")
+                time.sleep(3.2)
+                progress_bar.progress(4.7)
+
+                status_placeholder.text("Authenticating...")
+                time.sleep(4.3)
+                progress_bar.progress(76)
                 
-                status_placeholder.text("セキュリティトークンを検証中...")
-                time.sleep(0.4)
+                status_placeholder.text("Sending authentication information to the HP Pavilion Desktop TP01 series development machine.")
+                time.sleep(2.4)
                 progress_bar.progress(100)
                 
-                status_placeholder.text("認証成功。システムを起動します...")
-                time.sleep(0.3)
+                status_placeholder.text("Authentication complete; access to the server is authorized, and the process is starting.")
+                time.sleep(1.4)
                 
                 status_placeholder.empty()
                 progress_bar.empty()
