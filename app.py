@@ -282,7 +282,6 @@ if not str_lit.session_state.authenticated:
                 str_lit.session_state.authenticated = True
                 str_lit.rerun()
             else:
-                # 文字列連結で .com の自動コマンド化・リンク判定を回避
                 contact_email = "yuzukyoto0811@gmail." + "com"
                 str_lit.error(f"You do not have access permission.\nFor inquiries, please contact: {contact_email}")
     str_lit.stop()
@@ -361,7 +360,7 @@ if str_lit.session_state.page == "selection":
             str_lit.image("Kawase.jpg", width=180)
     with col2:
         str_lit.title("Bento Management System")
-        str_lit.caption("[SECURE SYSTEM v2.8] — 3Dホログラムアニメーションモード")
+        str_lit.caption("Powered by Python & Windows 10/11 & Android")
 
     str_lit.markdown("---")
     str_lit.subheader("🍱 お弁当を選択して個数を入力してください")
@@ -450,6 +449,9 @@ if str_lit.session_state.page == "selection":
             confirm_selection()
     else:
         str_lit.warning("お弁当が選択されていません。上のカードから選んでください！")
+
+    # --- フッター表記 ---
+    str_lit.markdown("<br><br><div style='text-align: center; color: #8b949e !important; font-size: 13px;'>© 2026 Yuzuki</div>", unsafe_allow_html=True)
 
 # ==========================================
 # 画面②：検索結果・印刷用ページ
