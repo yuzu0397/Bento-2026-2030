@@ -4,8 +4,8 @@ import time
 import base64
 import os
 
-# ページ設定
-str_lit.set_page_config(page_title="BENTO System v2.8 3D", layout="wide", page_icon="🍱")
+# ページ設定（BSOD風タイトルとアイコン）
+str_lit.set_page_config(page_title=":( Your System Ran Into a Problem", layout="wide", page_icon="🟦")
 
 # --- 状態管理の初期化 ---
 if "authenticated" not in str_lit.session_state:
@@ -31,108 +31,127 @@ def get_base64_image(image_path):
 
 sony_img_base64 = get_base64_image("Sony.jpg")
 
-# --- CSSスタイル設定 ---
+# --- CSSスタイル設定 (Windows 10 BSOD Theme) ---
 str_lit.markdown("""
 <style>
-.stApp {
-    background: radial-gradient(circle at 50% 20%, #1a2332 0%, #0d1117 80%);
-    color: #ffffff;
-    animation: appFadeIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+@import url('https://fonts.googleapis.com/css2?family=Segoe+UI:wght@300;400;600;700&display=swap');
+
+html, body, [data-testid="stAppViewContainer"] {
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif !important;
 }
 
-@keyframes appFadeIn {
-    0% { opacity: 0; transform: scale(0.98); }
-    100% { opacity: 1; transform: scale(1); }
+.stApp {
+    background-color: #0078d7 !important;
+    color: #ffffff !important;
 }
 
 [data-testid="stSidebar"] {
-    background-color: #161b22;
+    background-color: #005a9e !important;
 }
 
-h1, h2, h3, h4, h5, h6 {
-    color: #79c0ff !important;
-    font-weight: 700;
-    text-shadow: 0 0 10px rgba(121, 192, 255, 0.3);
+h1, h2, h3, h4, h5, h6, p, span, label, div {
+    color: #ffffff !important;
+    font-family: 'Segoe UI', sans-serif !important;
+    text-shadow: none !important;
 }
 
-p, span, label, div {
-    color: #f0f6fc !important;
+/* 巨大なBSOD顔文字 */
+.bsod-sad-face {
+    font-size: 110px;
+    font-weight: 300;
+    line-height: 1.0;
+    margin-bottom: 20px;
+    user-select: none;
 }
 
+/* モーダル / ダイアログ */
 div[data-baseweb="modal"], 
 div[role="dialog"], 
 section[tabindex="-1"] {
-    background-color: rgba(13, 17, 23, 0.85) !important;
-    backdrop-filter: blur(12px) !important;
+    background-color: rgba(0, 90, 158, 0.95) !important;
+    backdrop-filter: blur(5px) !important;
 }
 
 div[data-baseweb="modal"] > div, 
 div[role="dialog"] > div {
-    background: linear-gradient(145deg, #1f242c, #161b22) !important;
-    border: 2px solid #58a6ff !important;
-    border-top: 8px solid #00d2ff !important;
-    border-radius: 16px !important;
-    color: #f0f6fc !important;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 30px rgba(0, 210, 255, 0.2) !important;
-    transform-style: preserve-3d;
-    animation: modal3DPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards !important;
-}
-
-@keyframes modal3DPop {
-    0% {
-        opacity: 0;
-        transform: perspective(1000px) rotateX(-20deg) scale(0.8) translateZ(-100px);
-    }
-    100% {
-        opacity: 1;
-        transform: perspective(1000px) rotateX(0deg) scale(1) translateZ(0px);
-    }
+    background-color: #0078d7 !important;
+    border: 3px solid #ffffff !important;
+    border-radius: 0px !important;
+    color: #ffffff !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5) !important;
 }
 
 div[data-baseweb="modal"] * , 
 div[role="dialog"] * {
-    color: #f0f6fc !important;
+    color: #ffffff !important;
 }
 
+/* ボタン (BSODフラットスタイル) */
 .stButton > button {
-    background: linear-gradient(135deg, #21262d, #161b22) !important;
-    border: 1px solid #30363d !important;
-    border-radius: 10px !important;
-    color: #f0f6fc !important;
-    transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
-    transform: perspective(600px) translateZ(0px);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1);
+    background-color: rgba(255, 255, 255, 0.15) !important;
+    border: 2px solid #ffffff !important;
+    border-radius: 0px !important;
+    color: #ffffff !important;
+    font-weight: 600 !important;
+    transition: all 0.15s ease !important;
+    box-shadow: none !important;
 }
 
 .stButton > button:hover {
-    background: linear-gradient(135deg, #30363d, #21262d) !important;
-    border-color: #58a6ff !important;
-    transform: perspective(600px) translateZ(15px) translateY(-3px) rotateX(4deg) !important;
-    box-shadow: 0 12px 25px rgba(0, 210, 255, 0.35) !important;
+    background-color: #ffffff !important;
+    color: #0078d7 !important;
+    border-color: #ffffff !important;
+}
+
+.stButton > button:hover * {
+    color: #0078d7 !important;
 }
 
 .stButton > button:active {
-    transform: perspective(600px) translateZ(-8px) translateY(2px) rotateX(-2deg) !important;
-    box-shadow: 0 2px 6px rgba(0, 210, 255, 0.2) !important;
+    background-color: #e5e5e5 !important;
+    color: #0078d7 !important;
 }
 
+/* 入力フォーム */
+input {
+    background-color: rgba(255, 255, 255, 0.2) !important;
+    color: #ffffff !important;
+    border: 1px solid #ffffff !important;
+    border-radius: 0px !important;
+}
+
+input:focus {
+    border-color: #ffffff !important;
+    background-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+/* 3DカードをBSODのフラットタイル風に改修 */
 .bento-3d-card {
-    transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    transform-style: preserve-3d;
-    perspective: 800px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    padding: 12px;
+    text-align: center;
+    margin-bottom: 8px;
+    height: 130px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.2s ease;
 }
 
 .bento-3d-card:hover {
-    transform: perspective(800px) rotateX(8deg) rotateY(-4deg) translateZ(12px) translateY(-5px);
+    background: rgba(255, 255, 255, 0.25);
+    border-color: #ffffff;
+    transform: translateY(-2px);
 }
 
-.bento-icon-3d {
-    animation: iconFloat 3s ease-in-out infinite alternate;
-}
-
-@keyframes iconFloat {
-    0% { transform: translateY(0px) rotate(0deg); }
-    100% { transform: translateY(-6px) rotate(5deg); }
+.bsod-code-box {
+    font-family: 'Consolas', 'Courier New', monospace !important;
+    font-size: 13px;
+    line-height: 1.6;
+    margin-top: 15px;
+    opacity: 0.9;
 }
 
 @media print {
@@ -144,17 +163,16 @@ div[role="dialog"] * {
         background: #ffffff !important;
         color: #000000 !important;
         zoom: 0.8;
-        animation: none !important;
     }
     [data-testid="stSidebar"], 
     button, 
     .no-print,
-    .stButton {
+    .stButton,
+    .bsod-sad-face {
         display: none !important;
     }
     h1, h2, h3, h4, h5, h6, p, span, label, div {
         color: #000000 !important;
-        text-shadow: none !important;
     }
     .print-container {
         font-size: 8px !important;
@@ -168,54 +186,31 @@ div[role="dialog"] * {
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: radial-gradient(circle at center, #1a2333 0%, #080b10 100%);
+    background: #0078d7;
     z-index: 999999;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    perspective: 1000px;
 }
 
 .sony-logo {
-    width: 550px !important;
-    max-width: 75vw !important;
+    width: 450px !important;
+    max-width: 70vw !important;
     height: auto !important;
-    object-fit: contain;
-    transform-style: preserve-3d;
-    animation: sonyDarkFadeOutEffect 2.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    filter: brightness(0) invert(1);
+    animation: bsodFade 2.6s ease forwards;
 }
 
-@keyframes sonyDarkFadeOutEffect {
-    0% {
-        opacity: 0;
-        filter: brightness(2.5) drop-shadow(0 0 50px rgba(0, 210, 255, 1));
-        transform: perspective(1000px) rotateY(-180deg) rotateX(45deg) scale(0.1) translateZ(-800px);
-    }
-    25% {
-        opacity: 1;
-        filter: brightness(1.8) drop-shadow(0 0 30px rgba(0, 210, 255, 0.8));
-        transform: perspective(1000px) rotateY(10deg) rotateX(-5deg) scale(1.1) translateZ(50px);
-    }
-    65% {
-        opacity: 1;
-        transform: perspective(1000px) rotateY(0deg) rotateX(0deg) scale(1) translateZ(0px);
-        filter: brightness(1) drop-shadow(0 0 20px rgba(0, 210, 255, 0.5));
-    }
-    82% {
-        opacity: 0.5;
-        filter: brightness(0.4) drop-shadow(0 0 8px rgba(0, 210, 255, 0.2));
-        transform: perspective(1000px) rotateX(10deg) scale(0.96) translateZ(-30px);
-    }
-    100% {
-        opacity: 0;
-        filter: brightness(0) drop-shadow(0 0 0px rgba(0, 0, 0, 0));
-        transform: perspective(1000px) rotateX(20deg) scale(0.9) translateZ(-150px);
-    }
+@keyframes bsodFade {
+    0% { opacity: 0; transform: scale(0.95); }
+    20% { opacity: 1; transform: scale(1); }
+    80% { opacity: 1; transform: scale(1); }
+    100% { opacity: 0; transform: scale(1.05); }
 }
 
-/* --- Windows 10 BSoD（ブルースクリーン）スタイル --- */
-.bsod-screen {
+.error-screen {
     position: fixed;
     top: 0;
     left: 0;
@@ -225,76 +220,55 @@ div[role="dialog"] * {
     z-index: 9999999;
     display: flex;
     flex-direction: column;
+    align-items: center;
     justify-content: center;
-    align-items: flex-start;
-    padding: 8% 12%;
-    font-family: 'Segoe UI', 'Meiryo', sans-serif;
-    color: #ffffff !important;
+    padding: 40px;
 }
 
-.bsod-screen * {
-    color: #ffffff !important;
-}
-
-.bsod-face {
-    font-size: 110px;
-    font-weight: 300;
-    line-height: 1;
-    margin-bottom: 25px;
-}
-
-.bsod-msg {
-    font-size: 26px;
-    font-weight: 300;
-    line-height: 1.4;
-    margin-bottom: 35px;
-    max-width: 900px;
-}
-
-.bsod-footer {
-    font-size: 15px;
-    line-height: 1.8;
-    font-weight: 300;
-}
-
-.bsod-code {
-    margin-top: 15px;
-    font-size: 13px;
-    opacity: 0.9;
+.error-box {
+    border: 3px solid #ffffff;
+    padding: 35px 45px;
+    max-width: 680px;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.1);
 }
 </style>
 """, unsafe_allow_html=True)
 
-# --- パスワード認証画面 ---
+# --- パスワード認証画面 (BSODエラー風) ---
 if not str_lit.session_state.authenticated:
     _, center_col, _ = str_lit.columns([1, 2, 1])
     with center_col:
-        str_lit.markdown("<br><br><br>", unsafe_allow_html=True)
-        str_lit.subheader("🔒 システム認証")
-        pwd = str_lit.text_input("Please enter your password (4-digit PIN code).", type="password")
-        if str_lit.button("Log in", use_container_width=True):
+        str_lit.markdown("<div class='bsod-sad-face'>:(</div>", unsafe_allow_html=True)
+        str_lit.markdown("## Your BENTO System ran into a problem and needs to authenticate.")
+        str_lit.markdown("We're just collecting some security info, and then you can proceed.")
+        str_lit.markdown("<br>", unsafe_allow_html=True)
+        
+        pwd = str_lit.text_input("Enter 4-digit PIN code to restart system:", type="password")
+        
+        if str_lit.button("Restart & Login", use_container_width=True):
             if pwd == "0531":
                 status_placeholder = str_lit.empty()
                 progress_bar = str_lit.progress(0)
                 
-                status_placeholder.text("Connection to the server has started.")
-                time.sleep(5.6)
+                status_placeholder.text("0% complete : Connecting to host server...")
+                time.sleep(1.5)
                 progress_bar.progress(20)
                 
-                status_placeholder.text("Starting authentication with the server...")
-                time.sleep(3.2)
+                status_placeholder.text("20% complete : Initializing system credentials...")
+                time.sleep(1.2)
                 progress_bar.progress(47)
 
-                status_placeholder.text("Authenticating...")
-                time.sleep(4.3)
+                status_placeholder.text("47% complete : Verifying TP01 development environment...")
+                time.sleep(1.3)
                 progress_bar.progress(76)
                 
-                status_placeholder.text("Sending authentication information to the HP Pavilion Desktop TP01 series development machine.")
-                time.sleep(2.4)
+                status_placeholder.text("76% complete : Executing kernel dump & memory check...")
+                time.sleep(1.0)
                 progress_bar.progress(100)
                 
-                status_placeholder.text("Authentication complete; access to the server is authorized, and the process is starting.")
-                time.sleep(1.4)
+                status_placeholder.text("100% complete : Authentication succeeded. System restarting...")
+                time.sleep(0.8)
                 
                 status_placeholder.empty()
                 progress_bar.empty()
@@ -302,8 +276,8 @@ if not str_lit.session_state.authenticated:
                 str_lit.session_state.authenticated = True
                 str_lit.rerun()
             else:
-                contact_email = "yuzukyoto0811@gmail.com"
-                str_lit.error(f"You do not have access permission.\nFor inquiries, please contact: {contact_email}")
+                contact_email = "yuzukyoto0811@gmail." + "com"
+                str_lit.error(f"Stop code: SYSTEM_THREAD_EXCEPTION_NOT_HANDLED\nContact Administrator: {contact_email}")
     str_lit.stop()
 
 # --- スペック・環境情報の取得と必須比較 ---
@@ -323,30 +297,28 @@ is_cpu_ok = (cpu_cores >= MIN_CPU_CORES and max_cpu_freq_ghz >= MIN_CPU_FREQ_GHZ
 
 if not (is_ram_ok and is_cpu_ok):
     str_lit.markdown(f"""
-    <div class="bsod-screen">
-        <div class="bsod-face">:(</div>
-        <div class="bsod-msg">
-            PC/デバイスに問題が発生したため、処理を停止しました。<br>
-            BENTO System v2.8 の実行に必要なシステム要件を満たしていません。
-        </div>
-        <div class="bsod-footer">
-            詳細については、次のサポート宛てにお問い合わせください。<br>
-            メールアドレス: <b>yuzukyoto0811@gmail.com</b>
-            <div class="bsod-code">
-                停止コード: INSUFFICIENT_SYSTEM_RESOURCES<br>
-                検出スペック: RAM {total_ram_gb}GB / CPU {cpu_cores}Core ({max_cpu_freq_ghz}GHz)
-            </div>
+    <div class="error-screen">
+        <div class="bsod-sad-face">:(</div>
+        <div class="error-box">
+            <h2 style="margin-top: 0; font-size: 24px;">YOUR PC RAN INTO A PROBLEM AND NEEDS TO RESTART.</h2>
+            <p style="font-size: 15px; margin-bottom: 20px;">
+                Stop code: HARDWARE_SPEC_UNSUPPORTED<br>
+                What failed: bento_system.sys<br><br>
+                Your device does not meet the minimum hardware requirements (RAM: {total_ram_gb}GB, CPU Cores: {cpu_cores}).
+            </p>
         </div>
     </div>
     """, unsafe_allow_html=True)
     str_lit.stop()
 
-# --- 起動画面（Sonyロゴ 3D演出：2.6秒） ---
+# --- 起動画面（Sonyロゴ BSODスタイル：2.6秒） ---
 if not str_lit.session_state.booted:
     boot_placeholder = str_lit.empty()
     boot_html = f'''
     <div class="boot-container">
+        <div class="bsod-sad-face">:(</div>
         <img class="sony-logo" src="data:image/jpeg;base64,{sony_img_base64}" />
+        <p style="margin-top: 20px; font-size: 18px;">System is recovering... Please wait.</p>
     </div>
     '''
     boot_placeholder.markdown(boot_html, unsafe_allow_html=True)
@@ -380,19 +352,27 @@ bento_data = {
 }
 
 # ==========================================
-# 画面①：お弁当選択画面
+# 画面①：お弁当選択画面 (BSODテーマ)
 # ==========================================
 if str_lit.session_state.page == "selection":
     col1, col2 = str_lit.columns([1, 4])
     with col1:
         if os.path.exists("Kawase.jpg"):
-            str_lit.image("Kawase.jpg", width=180)
+            str_lit.image("Kawase.jpg", width=160)
+        else:
+            str_lit.markdown("<div class='bsod-sad-face' style='font-size:60px;'>:(</div>", unsafe_allow_html=True)
+            
     with col2:
-        str_lit.title("Bento Management System")
-        str_lit.caption("Powered by Python & Windows 10/11 & Android")
+        str_lit.title("BENTO SYSTEM v2.8 BSOD")
+        str_lit.markdown("""
+        <div class="bsod-code-box">
+            Stop code: BENTO_SYSTEM_SELECTION_REQUIRED<br>
+            What failed: bento_data.dll
+        </div>
+        """, unsafe_allow_html=True)
 
     str_lit.markdown("---")
-    str_lit.subheader("🍱 お弁当を選択して個数を入力してください")
+    str_lit.subheader("🍱 Select Bento & Set Quantity")
 
     menu_keys = list(bento_data.keys())
     cols_per_row = 4
@@ -406,30 +386,13 @@ if str_lit.session_state.page == "selection":
             with cols[idx]:
                 is_selected = bento_name in str_lit.session_state.selected_bentos
                 
-                border_color = "#00d2ff" if is_selected else "#30363d"
-                bg_color = "linear-gradient(145deg, #1f2a38, #161b22)" if is_selected else "linear-gradient(145deg, #1c2128, #161b22)"
-                shadow = "0 10px 25px rgba(0, 210, 255, 0.3)" if is_selected else "0 5px 15px rgba(0, 0, 0, 0.3)"
-                badge = "✅ 選択中" if is_selected else "➕ 未選択"
-                badge_color = "#00d2ff" if is_selected else "#8b949e"
+                badge = "[ SELECTED ]" if is_selected else "[ UNSELECTED ]"
+                bg_style = "background: rgba(255,255,255,0.3); border: 2px solid #ffffff;" if is_selected else "background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.4);"
 
                 str_lit.markdown(f"""
-                <div class="bento-3d-card" style="
-                    background: {bg_color};
-                    border: 2px solid {border_color};
-                    border-radius: 14px;
-                    padding: 12px;
-                    text-align: center;
-                    margin-bottom: 8px;
-                    box-shadow: {shadow};
-                    height: 130px;
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: center;
-                    align-items: center;
-                ">
-                    <div class="bento-icon-3d" style="font-size: 28px; margin-bottom: 4px;">🍱</div>
-                    <div style="font-weight: bold; font-size: 13px; color: #f0f6fc; margin-bottom: 4px; width: 100%; white-space: normal; line-height: 1.2;">{bento_name}</div>
-                    <div style="font-size: 11px; color: {badge_color}; font-weight: bold;">{badge}</div>
+                <div class="bento-3d-card" style="{bg_style}">
+                    <div style="font-weight: bold; font-size: 13px; color: #ffffff; margin-bottom: 4px; line-height: 1.2;">{bento_name}</div>
+                    <div style="font-size: 11px; color: #ffffff; font-family: monospace;">{badge}</div>
                 </div>
                 """, unsafe_allow_html=True)
 
@@ -441,57 +404,55 @@ if str_lit.session_state.page == "selection":
                         key=f"qty_{bento_name}"
                     )
                 
-                btn_label = "❌ 解除する" if is_selected else "選択する"
+                btn_label = "Remove" if is_selected else "Select"
                 if str_lit.button(btn_label, key=f"card_btn_{bento_name}", use_container_width=True):
                     if is_selected:
                         str_lit.session_state.selected_bentos.remove(bento_name)
-                        str_lit.toast(f"「{bento_name}」の選択を解除しました", icon="❌")
+                        str_lit.toast(f"Deselected: {bento_name}")
                     else:
                         str_lit.session_state.selected_bentos.append(bento_name)
-                        str_lit.toast(f"選択しました：「{bento_name}」", icon="✅")
+                        str_lit.toast(f"Selected: {bento_name}")
                     str_lit.rerun()
 
     str_lit.markdown("---")
 
     if str_lit.session_state.selected_bentos:
-        @str_lit.dialog("⚠️ 確認画面")
+        @str_lit.dialog("⚠️ SYSTEM DIAGNOSTIC")
         def confirm_selection():
-            str_lit.write("以下の内容で検索結果を表示しますか？")
-            str_lit.write("よろしいですか？")
-            
-            str_lit.markdown("### 📋 現在の選択内容:")
+            str_lit.write("Are you sure you want to compile and print total ingredients?")
+            str_lit.markdown("### 📋 Current Selections:")
             for bento in str_lit.session_state.selected_bentos:
                 qty = str_lit.session_state.get(f"qty_{bento}", 1)
-                str_lit.write(f"- **{bento}**: {qty}個")
+                str_lit.write(f"- **{bento}**: {qty} pcs")
             
             str_lit.markdown("<br>", unsafe_allow_html=True)
             col_yes, col_no = str_lit.columns(2)
             with col_yes:
-                if str_lit.button("Yes,I agree.", type="primary", use_container_width=True):
+                if str_lit.button("Proceed", type="primary", use_container_width=True):
                     str_lit.session_state.page = "result"
                     str_lit.rerun()
             with col_no:
-                if str_lit.button("キャンセル", use_container_width=True):
+                if str_lit.button("Cancel", use_container_width=True):
                     str_lit.rerun()
 
-        if str_lit.button("🔍 検索結果を表示（印刷用ページへ）", type="primary", use_container_width=True):
+        if str_lit.button("🔍 Execute Diagnostic & Calculate (Print View)", type="primary", use_container_width=True):
             confirm_selection()
     else:
-        str_lit.warning("お弁当が選択されていません。上のカードから選んでください！")
+        str_lit.warning("No Bento selected. Please select items from above.")
 
     # --- フッター表記 ---
-    str_lit.markdown("<br><br><div style='text-align: center; color: #8b949e !important; font-size: 13px;'>© 2026 Yuzuki</div>", unsafe_allow_html=True)
+    str_lit.markdown("<br><br><div style='text-align: center; color: #ffffff !important; font-size: 13px; font-family: monospace;'>Stop code: SUCCESS_2026_YUZUKI</div>", unsafe_allow_html=True)
 
 # ==========================================
 # 画面②：検索結果・印刷用ページ
 # ==========================================
 elif str_lit.session_state.page == "result":
-    str_lit.title("📊 製造材料の合計個数一覧（印刷用）")
+    str_lit.title("📊 Ingredients Dump & Print Summary")
     str_lit.caption("お父さん用：ブラウザの印刷設定でレイアウトを【横】にして印刷してください。")
     
     str_lit.markdown("---")
 
-    if str_lit.button("⬅️ お弁当の選択画面に戻る", use_container_width=True):
+    if str_lit.button("⬅️ Return to Selection Screen", use_container_width=True):
         str_lit.session_state.page = "selection"
         str_lit.rerun()
 
@@ -523,6 +484,6 @@ elif str_lit.session_state.page == "result":
             with target_col:
                 str_lit.write(f"・ **{ing}**: **{total_count}{unit}**")
     else:
-        str_lit.warning("集計するデータがありません。")
+        str_lit.warning("No data to aggregate.")
 
     str_lit.markdown('</div>', unsafe_allow_html=True)
