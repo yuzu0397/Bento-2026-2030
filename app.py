@@ -3,12 +3,11 @@ import streamlit as str_lit
 # ページ設定
 str_lit.set_page_config(page_title=":( Your PC ran into a problem", layout="wide", page_icon="🟦")
 
-# --- 純粋BSOD画面 & 3言語2秒切替アニメーション ---
-str_lit.markdown("""
+# --- 純粋BSOD画面 & 3言語2秒切替アニメーション (コードブロック化防止版) ---
+bsod_html = """
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Segoe+UI:wght@300;400;600&display=swap');
 
-/* 全面をWin10 BSODカラーに固定＆スクロール禁止 */
 html, body, [data-testid="stAppViewContainer"] {
     background-color: #0078d7 !important;
     color: #ffffff !important;
@@ -16,12 +15,10 @@ html, body, [data-testid="stAppViewContainer"] {
     overflow: hidden !important;
 }
 
-/* ヘッダー・サイドバー等を非表示 */
 header, footer, [data-testid="stSidebar"], [data-testid="stHeader"] {
     display: none !important;
 }
 
-/* BSODコンテナ */
 .bsod-container {
     position: fixed;
     top: 0;
@@ -39,7 +36,6 @@ header, footer, [data-testid="stSidebar"], [data-testid="stHeader"] {
     color: #ffffff;
 }
 
-/* BSOD顔文字 */
 .bsod-sad-face {
     font-size: 120px;
     font-weight: 300;
@@ -48,7 +44,6 @@ header, footer, [data-testid="stSidebar"], [data-testid="stHeader"] {
     user-select: none;
 }
 
-/* メッセージ表示エリア (3言語切り替え) */
 .message-wrapper {
     position: relative;
     height: 110px;
@@ -68,7 +63,6 @@ header, footer, [data-testid="stSidebar"], [data-testid="stHeader"] {
     animation: cycleLang 6s infinite ease-in-out;
 }
 
-/* 2秒間隔（全体6秒サイクル）のタイマー設定 */
 .lang-ja { animation-delay: 0s; }
 .lang-en { animation-delay: 2s; }
 .lang-ko { animation-delay: 4s; }
@@ -81,7 +75,6 @@ header, footer, [data-testid="stSidebar"], [data-testid="stHeader"] {
     100% { opacity: 0; }
 }
 
-/* STOPコード */
 .bsod-code-box {
     font-family: 'Consolas', 'Courier New', monospace;
     font-size: 14px;
@@ -92,32 +85,17 @@ header, footer, [data-testid="stSidebar"], [data-testid="stHeader"] {
 </style>
 
 <div class="bsod-container">
-    <div class="bsod-sad-face">:(</div>
-    
-    <div class="message-wrapper">
-        <!-- 日本語 (0s ~ 2s) -->
-        <div class="lang-msg lang-ja">
-            致命的なエラーが発生したため、システムはお使いになれません。<br>
-            エラー情報を収集しています。自動的に再起動はされません。
-        </div>
-        <!-- 英語 (2s ~ 4s) -->
-        <div class="lang-msg lang-en">
-            A critical error has occurred. The system is currently unavailable.<br>
-            We're collecting error info, but the system will not restart automatically.
-        </div>
-        <!-- 韓国語 (4s ~ 6s) -->
-        <div class="lang-msg lang-ko">
-            치명적인 오류가 발생하여 시스템을 사용할 수 없습니다.<br>
-            오류 정보를 수집하고 있으며, 자동으로 다시 시작되지 않습니다.
-        </div>
-    </div>
-
-    <div class="bsod-code-box">
-        Stop code: CRITICAL_SYSTEM_ERROR_DISABLED<br>
-        What failed: bento_system.sys
-    </div>
+<div class="bsod-sad-face">:(</div>
+<div class="message-wrapper">
+<div class="lang-msg lang-ja">致命的なエラーが発生したため、システムはお使いになれません。<br>エラー情報を収集しています。自動的に再起動はされません。</div>
+<div class="lang-msg lang-en">A critical error has occurred. The system is currently unavailable.<br>We're collecting error info, but the system will not restart automatically.</div>
+<div class="lang-msg lang-ko">치명적인 오류가 발생하여 시스템을 사용할 수 없습니다.<br>오류 정보를 수집하고 있으며, 자동으로 다시 시작되지 않습니다.</div>
 </div>
-""", unsafe_allow_html=True)
+<div class="bsod-code-box">Stop code: CRITICAL_SYSTEM_ERROR_DISABLED<br>What failed: bento_system.sys</div>
+</div>
+"""
+
+str_lit.markdown(bsod_html, unsafe_allow_html=True)
 
 # 処理を完全停止
 str_lit.stop()
