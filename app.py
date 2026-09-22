@@ -214,33 +214,53 @@ div[role="dialog"] * {
     }
 }
 
-.error-screen {
+/* --- Windows 10 BSoD（ブルースクリーン）スタイル --- */
+.bsod-screen {
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: rgba(13, 17, 23, 0.95);
-    backdrop-filter: blur(8px);
+    background-color: #0078d7;
     z-index: 9999999;
     display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: center;
-    padding: 20px;
+    align-items: flex-start;
+    padding: 8% 12%;
+    font-family: 'Segoe UI', 'Meiryo', sans-serif;
+    color: #ffffff !important;
 }
 
-.error-box {
-    background: linear-gradient(145deg, #1f242c, #161b22);
-    border: 2px solid #ff7b72;
-    border-top: 10px solid #ff7b72;
-    padding: 35px 45px;
-    border-radius: 16px;
-    box-shadow: 0 20px 50px rgba(255, 123, 114, 0.3);
-    max-width: 620px;
-    width: 100%;
-    text-align: center;
-    animation: modal3DPop 0.4s ease-out;
+.bsod-screen * {
+    color: #ffffff !important;
+}
+
+.bsod-face {
+    font-size: 110px;
+    font-weight: 300;
+    line-height: 1;
+    margin-bottom: 25px;
+}
+
+.bsod-msg {
+    font-size: 26px;
+    font-weight: 300;
+    line-height: 1.4;
+    margin-bottom: 35px;
+    max-width: 900px;
+}
+
+.bsod-footer {
+    font-size: 15px;
+    line-height: 1.8;
+    font-weight: 300;
+}
+
+.bsod-code {
+    margin-top: 15px;
+    font-size: 13px;
+    opacity: 0.9;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -282,7 +302,7 @@ if not str_lit.session_state.authenticated:
                 str_lit.session_state.authenticated = True
                 str_lit.rerun()
             else:
-                contact_email = "yuzukyoto0811@gmail." + "com"
+                contact_email = "yuzukyoto0811@gmail.com"
                 str_lit.error(f"You do not have access permission.\nFor inquiries, please contact: {contact_email}")
     str_lit.stop()
 
@@ -303,10 +323,19 @@ is_cpu_ok = (cpu_cores >= MIN_CPU_CORES and max_cpu_freq_ghz >= MIN_CPU_FREQ_GHZ
 
 if not (is_ram_ok and is_cpu_ok):
     str_lit.markdown(f"""
-    <div class="error-screen">
-        <div class="error-box">
-            <h2 style="color: #ff7b72 !important; margin-top: 0; font-size: 22px;">⚡ [ SYSTEM ERROR ] Insufficient System Specifications ⚡</h2>
-            <p style="font-size: 14px; margin-bottom: 20px;">Your device does not meet the minimum requirements for Bento Management System v2.8.</p>
+    <div class="bsod-screen">
+        <div class="bsod-face">:(</div>
+        <div class="bsod-msg">
+            PC/デバイスに問題が発生したため、処理を停止しました。<br>
+            BENTO System v2.8 の実行に必要なシステム要件を満たしていません。
+        </div>
+        <div class="bsod-footer">
+            詳細については、次のサポート宛てにお問い合わせください。<br>
+            メールアドレス: <b>yuzukyoto0811@gmail.com</b>
+            <div class="bsod-code">
+                停止コード: INSUFFICIENT_SYSTEM_RESOURCES<br>
+                検出スペック: RAM {total_ram_gb}GB / CPU {cpu_cores}Core ({max_cpu_freq_ghz}GHz)
+            </div>
         </div>
     </div>
     """, unsafe_allow_html=True)
