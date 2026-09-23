@@ -3,7 +3,7 @@ import streamlit as str_lit
 # ページ設定
 str_lit.set_page_config(page_title=":( System Error - 000xWinKL", layout="wide", page_icon="🟦")
 
-# --- BSOD画面（メイン:5秒周期/4秒表示、詳細情報:3秒切替） ---
+# --- BSOD画面（マルチアスペクト比対応：PC 16:9 / スマホ 9:16 & 9:21） ---
 bsod_html = """
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Segoe+UI:wght@300;400;600&display=swap');
@@ -19,6 +19,7 @@ header, footer, [data-testid="stSidebar"], [data-testid="stHeader"] {
     display: none !important;
 }
 
+/* 基本コンテナ（PC 16:9 基準） */
 .bsod-container {
     position: fixed;
     top: 0;
@@ -31,37 +32,39 @@ header, footer, [data-testid="stSidebar"], [data-testid="stHeader"] {
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
-    padding: 8% 12%;
+    padding: 8vh 10vw;
     box-sizing: border-box;
     color: #ffffff;
 }
 
+/* 画面サイズに応じた可変フォントサイズ */
 .bsod-sad-face {
-    font-size: 110px;
+    font-size: clamp(80px, 10vw, 120px);
     font-weight: 300;
     line-height: 1.0;
     margin-bottom: 25px;
     user-select: none;
 }
 
-/* --- メインエラー文章（5秒周期 / 4秒表示・全体10秒サイクル） --- */
+/* --- メインエラー文章（5秒周期 / 4秒表示） --- */
 .main-wrapper {
     position: relative;
-    height: 90px;
+    height: 100px;
     width: 100%;
-    max-width: 850px;
-    margin-bottom: 25px;
+    max-width: 900px;
+    margin-bottom: 20px;
 }
 
 .main-msg {
     position: absolute;
     top: 0;
     left: 0;
-    font-size: 26px;
+    font-size: clamp(18px, 2.5vw, 26px);
     font-weight: 300;
     line-height: 1.4;
     opacity: 0;
     animation: cycleMain 10s infinite ease-in-out;
+    width: 100%;
 }
 
 .main-ja { animation-delay: 0s; }
@@ -70,19 +73,19 @@ header, footer, [data-testid="stSidebar"], [data-testid="stHeader"] {
 @keyframes cycleMain {
     0% { opacity: 0; transform: translateY(3px); }
     3% { opacity: 1; transform: translateY(0); }
-    40% { opacity: 1; transform: translateY(0); }  /* 4秒間しっかり表示 */
+    40% { opacity: 1; transform: translateY(0); }
     45% { opacity: 0; transform: translateY(-3px); }
     100% { opacity: 0; }
 }
 
-/* --- OS情報・再起動・エラーコード（3秒切替・全体6秒サイクル） --- */
+/* --- 詳細情報（3秒周期切替） --- */
 .info-wrapper {
     position: relative;
     height: 100px;
     width: 100%;
-    max-width: 850px;
+    max-width: 900px;
     font-family: 'Consolas', 'Courier New', monospace;
-    font-size: 15px;
+    font-size: clamp(13px, 1.8vw, 15px);
     line-height: 1.7;
     opacity: 0.95;
 }
@@ -93,6 +96,7 @@ header, footer, [data-testid="stSidebar"], [data-testid="stHeader"] {
     left: 0;
     opacity: 0;
     animation: cycleInfo 6s infinite ease-in-out;
+    width: 100%;
 }
 
 .info-ja { animation-delay: 0s; }
@@ -104,6 +108,24 @@ header, footer, [data-testid="stSidebar"], [data-testid="stHeader"] {
     43% { opacity: 1; transform: translateY(0); }
     48% { opacity: 0; transform: translateY(-2px); }
     100% { opacity: 0; }
+}
+
+/* --- スマホ縦長画面用スタイル (9:16 / 9:21 などの縦長端末) --- */
+@media (max-aspect-ratio: 1/1) {
+    .bsod-container {
+        justify-content: flex-start;
+        padding: 12vh 7vw 5vh 7vw;
+    }
+    .bsod-sad-face {
+        margin-bottom: 20px;
+    }
+    .main-wrapper {
+        height: 140px; /* 改行考慮で少し高さを確保 */
+        margin-bottom: 30px;
+    }
+    .info-wrapper {
+        height: 120px;
+    }
 }
 </style>
 
@@ -122,5 +144,5 @@ header, footer, [data-testid="stSidebar"], [data-testid="stHeader"] {
 
 str_lit.markdown(bsod_html, unsafe_allow_html=True)
 
-# 完全に処理を停止（ロック状態）
+# 処理を完全停止
 str_lit.stop()
