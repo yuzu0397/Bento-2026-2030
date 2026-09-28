@@ -462,32 +462,65 @@ elif str_lit.session_state.page == "result":
 
     str_lit.markdown("<br>", unsafe_allow_html=True)
 
-    total_ingredients = {}
-    for bento in str_lit.session_state.selected_bentos:
-        qty = str_lit.session_state.get(f"qty_{bento}", 1)
-        ingredients = bento_data[bento]["items"]
-        for ing, count in ingredients.items():
-            total_ingredients[ing] = total_ingredients.get(ing, 0) + (count * qty)
-
+    # ==========================================
+    # メニュー種類ごとの材料一覧
+    # ==========================================
+    # 選択したメニューをまとめず、
+    # 「いなり天丼 B」「いなり天丼 R」などメニューごとに表示します。
     str_lit.markdown('<div class="print-container">', unsafe_allow_html=True)
-    
-    if total_ingredients:
-        items_list = list(total_ingredients.items())
-        num_cols = 7
-        cols = str_lit.columns(num_cols)
-        
-        for idx, (ing, total_count) in enumerate(items_list):
-            if "(g)" in ing:
-                unit = "g"
-            elif "(切れ)" in ing:
-                unit = "切れ"
-            else:
-                unit = "個"
-            
-            target_col = cols[idx % num_cols]
-            with target_col:
-                str_lit.write(f"・ **{ing}**: **{total_count}{unit}**")
+
+    if str_lit.session_state.selected_bentos:
+        for bento in str_lit.session_state.selected_bentos:
+            qty = str_lit.session_state.get(f"qty_{bento}", 1)
+            ingredients = bento_data[bento]["items"]
+
+            # メニュー見出し
+            str_lit.markdown(
+                f"""
+                <div style="
+                    background: linear-gradient(135deg, #1f2a38, #161b22);
+                    border: 2px solid #58a6ff;
+                    border-left: 8px solid #00d2ff;
+                    border-radius: 10px;
+                    padding: 10px 14px;
+                    margin-top: 14px;
+                    margin-bottom: 8px;
+                ">
+                    <div style="font-size: 20px; font-weight: 700;">
+                        🍱 {bento}
+                    </div>
+                    <div style="font-size: 13px; margin-top: 3px;">
+                        製造数：<strong>{qty}個</strong>
+                    </div>
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
+
+            # このメニューの材料だけを表示
+            num_cols = 5
+            cols = str_lit.columns(num_cols)
+
+            for idx, (ing, count) in enumerate(ingredients.items()):
+                total_count = count * qty
+
+                if "(g)" in ing:
+                    unit = "g"
+                elif "(切れ)" in ing:
+                    unit = "切れ"
+                else:
+                    unit = "個"
+
+                target_col = cols[idx % num_cols]
+                with target_col:
+                    str_lit.write(f"・ **{ing}**: **{total_count}{unit}**")
+
+            # メニューごとの区切り
+            str_lit.markdown(
+                '<div style="border-bottom: 1px solid #30363d; margin: 10px 0;"></div>',
+                unsafe_allow_html=True
+            )
     else:
-        str_lit.warning("集計するデータがありません。")
+        str_lit.warning("表示するメニューがありません。")
 
     str_lit.markdown('</div>', unsafe_allow_html=True)
